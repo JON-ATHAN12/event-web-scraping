@@ -1,6 +1,7 @@
 import requests
 import selectorlib
 from send_email import send_email
+import time
 
 # input
 URL = "https://programmer100.pythonanywhere.com/tours/"
@@ -34,13 +35,17 @@ def read(extracted):
 
 
 if __name__ == "__main__":
-    scraped = scrape(URL)
-    extracted = extract(scraped)
-    print(extracted)
-    content = read(extracted)
-    if extracted != "No upcoming tours":
-        if extracted not in content:
-            store(extracted)
-            send_email(message = "Hey, new event was send!")
-            print("email was send!")
+    while True:
+        scraped = scrape(URL)
+        extracted = extract(scraped)
+        print(extracted)
+        content = read(extracted)
+        if extracted != "No upcoming tours":
+            if extracted not in content:
+                store(extracted)
+                send_email(message = "Hey, new event was found!")
+                print("email was send!")
+        time.sleep(2)
+
+
 
